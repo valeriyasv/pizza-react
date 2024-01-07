@@ -36,6 +36,7 @@ body {
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(2, 1fr);
     grid-column-gap: 11px;
+    justify-items: center;
 
     @media (max-width: 1400px) {
       grid-template-columns: repeat(3, 1fr);
@@ -161,6 +162,10 @@ body {
         color: darken($color: #b6b6b6, $amount: 50);
       }
     }
+  }
+
+  .content__items {
+    display: block;
   }
 
   &__item {

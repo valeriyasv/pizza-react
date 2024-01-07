@@ -18,7 +18,8 @@ function Main() {
       .then((arr) => {
         setPizzas(arr);
         setIsLoading(false);
-      })
+      });
+    window.scrollTo(0, 0);
   }, []);
 
   return (
