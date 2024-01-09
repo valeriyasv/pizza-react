@@ -1,6 +1,6 @@
 import React from "react";
 
-function PizzaItem({title, imageUrl, sizes, types}) {
+function PizzaItem({title, imageUrl, sizes, types, price}) {
   const [activeType, setActiveType] = React.useState(0);
   const [activeSize, setActiveSize] = React.useState(0);
 
@@ -27,7 +27,7 @@ function PizzaItem({title, imageUrl, sizes, types}) {
     </ul>
   </div>
   <div className="pizza-block__bottom">
-    <div className="pizza-block__price">от 395 ₽</div>
+    <div className="pizza-block__price">от  {price}₽</div>
     <div className="button button--outline button--add">
       <svg
         width="12"

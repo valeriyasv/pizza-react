@@ -11,16 +11,27 @@ import '../scss/app.scss';
 function Main() {
   const [pizzas, setPizzas] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
-  
+  const [categoryId, setCategoryId] = React.useState(0);
+  const [sortType, setSortType] = React.useState({
+    name: 'популярности',
+    sortProperty: 'rating'
+  });
+
   React.useEffect(() =>  {
-    fetch('https://6593198fbb12970719905dff.mockapi.io/items')
+    setIsLoading(true);
+    fetch(`https://6593198fbb12970719905dff.mockapi.io/items?${categoriesCheck}&sortBy=${removeSign}&order=${replaceSortMethod}`
+    )
       .then((res) => res.json())
       .then((arr) => {
         setPizzas(arr);
         setIsLoading(false);
       });
     window.scrollTo(0, 0);
-  }, []);
+  }, [categoryId, sortType]);
+
+  const removeSign = sortType.sortProperty.replace('-', '');
+  const replaceSortMethod = sortType.sortProperty.includes('-') ? 'asc' : 'desc';
+  const categoriesCheck = categoryId > 0 ? `category=${categoryId}` : '';
 
   return (
     <div className="wrapper">
@@ -28,8 +39,8 @@ function Main() {
       <div className="content">
         <div className="container">
         <div className="content__top">
-            <Categories />
-            <Sort />
+          <Categories categoryId={categoryId} onClickCategories={(id) => setCategoryId(id)} />
+          <Sort value={sortType} onChangeSort={(i) => setSortType(i)}/>
         </div>
         <h2 className="content__title">Все пиццы</h2>
         <div className="content__items">
