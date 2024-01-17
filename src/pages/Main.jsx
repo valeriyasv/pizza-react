@@ -9,7 +9,10 @@ import Skeleton from '../components/Pizza-block/Skeleton';
 import '../scss/app.scss';
 import Pagination from '../components/Pagination/Pagination';
 
+export const SearchContext = React.createContext();
+
 function Main() {
+
   const [pizzas, setPizzas] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [categoryId, setCategoryId] = React.useState(0);
@@ -44,22 +47,24 @@ function Main() {
   ));
   return (
     <div className="wrapper">
-      <Header valueSearch={valueSearch} setValueSearch={setValueSearch}/>
-      <div className="content">
-        <div className="container">
-        <div className="content__top">
-          <Categories categoryId={categoryId} onClickCategories={(id) => setCategoryId(id)} />
-          <Sort value={sortType} onChangeSort={(i) => setSortType(i)}/>
+      <SearchContext.Provider value={{valueSearch, setValueSearch}}>
+        <Header />
+        <div className="content">
+          <div className="container">
+          <div className="content__top">
+            <Categories categoryId={categoryId} onClickCategories={(id) => setCategoryId(id)} />
+            <Sort value={sortType} onChangeSort={(i) => setSortType(i)}/>
+          </div>
+          <h2 className="content__title">Все пиццы</h2>
+          <div className="content__items">
+        {
+          isLoading ? skeletons : pizzasItems
+        }
         </div>
-        <h2 className="content__title">Все пиццы</h2>
-        <div className="content__items">
-      {
-        isLoading ? skeletons : pizzasItems
-      }
-      </div>
-      <Pagination onChangePage={(num) => setCurrentPage(num)}/>
+        <Pagination onChangePage={(num) => setCurrentPage(num)}/>
+          </div>
         </div>
-      </div>
+      </SearchContext.Provider>
     </div>
   );
 }
