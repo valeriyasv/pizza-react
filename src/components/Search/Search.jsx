@@ -4,7 +4,7 @@ import styles from './Search.module.scss';
 import { SearchContext } from '../../pages/Main';
 
 function Search() {
-  const { valueSearch, setValueSearch } = React.useContext(SearchContext);
+  const { valueSearch = '', setValueSearch } = React.useContext(SearchContext);
   const inputRef = React.useRef();
 
   
@@ -15,11 +15,13 @@ function Search() {
 
   const updateSearchValue = React.useCallback(
     debounce((str) => {
+      console.log('Обновление значения поиска:', str);
       setValueSearch(str)
     }, 150), [],
   );
 
   const onChangeInput = (e) => {
+    console.log('Значение ввода:', e.target.value);
     setValueSearch(e.target.value);
     updateSearchValue(e.target.value);
   }

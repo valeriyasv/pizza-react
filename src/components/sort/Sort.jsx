@@ -10,10 +10,11 @@ export const listSort = [
   {name: 'алфавиту (DESC)', sortProperty: 'title'},
   {name: 'алфавиту (ASC)', sortProperty: '-title'},
 ];
+
 function Sort() {
   const dispatch = useDispatch();
   const sort = useSelector(state => state.filter.sort);
-
+  const sortRef = React.useRef();
   const [openSort, setOpenSort] = React.useState(false);
 
   const onClickSortName = (obj) => {
@@ -21,8 +22,19 @@ function Sort() {
     setOpenSort(false);
   }
   
+  React.useEffect(() => {
+    const handleClickOutside = (event) => {
+      if(!event.composedPath().includes(sortRef.current)) {
+        setOpenSort(false);
+      }
+    }
+    document.body.addEventListener('click', handleClickOutside);
+
+    return () => document.body.removeEventListener('click', handleClickOutside);
+  }, []);
+
   return (
-    <div className="sort">
+    <div ref={sortRef} className="sort">
       <div className="sort__label">
         <svg
           width="10"

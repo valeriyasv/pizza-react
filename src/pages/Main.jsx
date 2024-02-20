@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import qs from 'qs';
@@ -14,7 +14,7 @@ import Pagination from '../components/Pagination/Pagination';
 import { setCategoryId, setCurrentPage, setFilters} from '../redux/slices/filterSlice';
 import axios from 'axios';
 
-export const SearchContext = React.createContext();
+export const SearchContext = React.createContext({ valueSearch: '', setValueSearch: () => {} });
 
 
 function Main() {
@@ -28,7 +28,8 @@ function Main() {
   const onChangeCategory = (id) => {
     dispatch(setCategoryId(id));
   }
-  const fetchPizzas = () => {
+  const [valueSearch, setValueSearch] = React.useState('');
+  const fetchPizzas = useCallback(() => {
     setIsLoading(true);
     
     const search = valueSearch ? `&search=${valueSearch}` : '';
@@ -43,17 +44,16 @@ function Main() {
         setPizzas(res.data);
         setIsLoading(false);
       })
-  };
+  }, [categoryId, currentPage, sort.sortProperty, valueSearch]);
   const [pizzas, setPizzas] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
-  const [valueSearch, setValueSearch] = React.useState('');
   
   //Если был первый рендер проверяем URL-параметры и сохраняем в редуксе
   React.useEffect(() => {
     if(window.location.search) {
       const params = qs.parse(window.location.search.substring(1));
       const sort = listSort.find((obj) => obj.sortProperty === params.sortProperty);
-    
+
       dispatch(setFilters({
         ...params,
         sort,
